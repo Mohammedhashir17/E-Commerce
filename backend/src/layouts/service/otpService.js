@@ -1,29 +1,22 @@
-// Simple OTP service (for development)
-// In production, use a proper email service like SendGrid, AWS SES, or Nodemailer
+import { sendOTPEmail } from './emailService.js';
 
+// OTP service with email sending
 const otpStore = new Map(); // In-memory store (use Redis in production)
 
 export const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
 };
 
-export const sendOTP = async (email, otp) => {
+export const sendOTP = async (email, otp, purpose = 'login') => {
   // Store OTP with expiration (5 minutes)
   otpStore.set(email, {
     otp,
     expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
+    purpose,
   });
 
-  // In development, log the OTP (remove in production)
-  console.log(`OTP for ${email}: ${otp}`);
-  
-  // TODO: In production, send email using SendGrid, AWS SES, or Nodemailer
-  // Example with Nodemailer:
-  // await transporter.sendMail({
-  //   to: email,
-  //   subject: 'Your OTP Code',
-  //   text: `Your OTP code is: ${otp}. It will expire in 5 minutes.`,
-  // });
+  // Send OTP via email
+  await sendOTPEmail(email, otp, purpose);
 
   return true;
 };

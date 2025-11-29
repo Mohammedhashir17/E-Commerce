@@ -27,7 +27,7 @@ export const sendOTPForLogin = async (email) => {
 
   // Generate and send OTP
   const otp = generateOTP();
-  await sendOTP(email, otp);
+  await sendOTP(email, otp, 'login');
 
   return { message: 'OTP sent to your email' };
 };
@@ -49,6 +49,7 @@ export const verifyOTPAndLogin = async (email, otp) => {
     _id: user._id,
     name: user.name,
     email: user.email,
+    role: user.role,
     token: generateToken(user._id),
   };
 };
@@ -72,7 +73,7 @@ export const sendOTPForRegister = async (email) => {
 
   // Generate and send OTP
   const otp = generateOTP();
-  await sendOTP(email, otp);
+  await sendOTP(email, otp, 'register');
 
   return { message: 'OTP sent to your email' };
 };
@@ -158,6 +159,7 @@ export const loginUser = async (email, password) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
       token: generateToken(user._id),
     };
   } else {

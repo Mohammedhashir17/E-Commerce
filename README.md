@@ -62,11 +62,15 @@ MONGODB_URI=mongodb+srv://root:amh%400203@e-commerce.felcyk3.mongodb.net/ecommer
 JWT_SECRET=your_jwt_secret_key_change_in_production
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+EMAIL_USER=projecthubvnb@gmail.com
+EMAIL_PASS=your-gmail-app-password
 ```
 
-**Important**: If your MongoDB password contains special characters like `@`, you must URL encode them:
-- `@` becomes `%40`
-- Example: `amh@0203` becomes `amh%400203` in the connection string
+**Important**: 
+- If your MongoDB password contains special characters like `@`, you must URL encode them:
+  - `@` becomes `%40`
+  - Example: `amh@0203` becomes `amh%400203` in the connection string
+- For email setup, see `EMAIL_SETUP.md` for detailed instructions on configuring Gmail App Password
 
 4. Start the backend server:
 ```bash

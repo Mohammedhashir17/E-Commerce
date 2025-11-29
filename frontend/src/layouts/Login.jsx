@@ -50,15 +50,16 @@ const Login = () => {
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
 
     if (!formData.email) {
       setError('Please enter your email');
+      showNotification('Please enter your email', 'error');
       return;
     }
 
     if (!validateGmail(formData.email)) {
-      setError('Please use a valid Gmail address');
+      setError('Please use a valid Gmail address (e.g., example@gmail.com)');
+      showNotification('Please use a valid Gmail address', 'error');
       return;
     }
 
@@ -75,11 +76,13 @@ const Login = () => {
         // Register - validate all fields
         if (!formData.name || !formData.password) {
           setError('Please fill all fields');
+          showNotification('Please fill all fields', 'error');
           setLoading(false);
           return;
         }
         if (formData.password.length < 6) {
           setError('Password must be at least 6 characters');
+          showNotification('Password must be at least 6 characters', 'error');
           setLoading(false);
           return;
         }
@@ -89,9 +92,10 @@ const Login = () => {
         showNotification('OTP sent to your email! Check your inbox.', 'success');
       }
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Failed to send OTP';
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to send OTP. Please try again.';
       setError(errorMsg);
       showNotification(errorMsg, 'error');
+      console.error('OTP send error:', err);
     } finally {
       setLoading(false);
     }
