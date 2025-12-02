@@ -130,16 +130,30 @@ const Orders = () => {
             <Grid container spacing={2}>
               {order.orderItems?.map((item, index) => (
                 <Grid item xs={12} sm={6} key={index}>
-                  <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      gap: 2,
+                      cursor: 'pointer',
+                      '&:hover': { opacity: 0.8 }
+                    }}
+                    onClick={() => {
+                      // Handle both populated (object) and non-populated (string) product references
+                      const productId = item.product?._id || item.product || item.productId || item._id;
+                      if (productId) {
+                        navigate(`/products/${productId}`);
+                      }
+                    }}
+                  >
                     <Box
                       component="img"
-                      src={item.image || '/placeholder.jpg'}
-                      alt={item.name}
+                      src={item.image || item.product?.image || '/placeholder.jpg'}
+                      alt={item.name || item.product?.name}
                       sx={{ width: 80, height: 80, borderRadius: 1, objectFit: 'cover' }}
                     />
                     <Box>
                       <Typography variant="body1" fontWeight="medium">
-                        {item.name}
+                        {item.name || item.product?.name}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Quantity: {item.quantity}
@@ -159,14 +173,24 @@ const Orders = () => {
               <Typography variant="h6">
                 Total: ₹{order.totalPrice?.toFixed(2)}
               </Typography>
-              <Button
-                variant="outlined"
-                startIcon={<Visibility />}
-                onClick={() => navigate(`/orders/${order._id}`)}
-                sx={{ borderColor: 'primary.main', color: 'primary.main' }}
-              >
-                View Details
-              </Button>
+              {order.orderItems && order.orderItems.length > 0 && (
+                <Button
+                  variant="outlined"
+                  startIcon={<Visibility />}
+                  onClick={() => {
+                    // Navigate to the first product in the order
+                    const firstItem = order.orderItems[0];
+                    // Handle both populated (object) and non-populated (string) product references
+                    const productId = firstItem.product?._id || firstItem.product || firstItem.productId || firstItem._id;
+                    if (productId) {
+                      navigate(`/products/${productId}`);
+                    }
+                  }}
+                  sx={{ borderColor: 'primary.main', color: 'primary.main' }}
+                >
+                  View Details
+                </Button>
+              )}
             </Box>
           </Paper>
         ))}

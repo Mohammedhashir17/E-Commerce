@@ -31,15 +31,13 @@ const ProductListing = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const category = searchParams.get('category');
-    const search = searchParams.get('search');
-    if (category || search) {
-      setFilters(prev => ({
-        ...prev,
-        category: category || prev.category,
-        search: search || prev.search,
-      }));
-    }
+    const category = searchParams.get('category') || '';
+    const search = searchParams.get('search') || '';
+    setFilters(prev => ({
+      ...prev,
+      category: category,
+      search: search,
+    }));
     fetchCategories();
     fetchWishlist();
   }, [searchParams]);

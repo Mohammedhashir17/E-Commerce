@@ -10,11 +10,39 @@ import {
   Grid,
   Divider,
   Alert,
+  MenuItem,
+  InputAdornment,
+  Select,
+  FormControl,
 } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import ProtectedRoute from '../components/ui/ProtectedRoute';
 import { useNotification } from '../contexts/NotificationContext';
 import { getCart, createOrder } from '../services/backend-service';
+
+// Country codes list
+const countryCodes = [
+  { code: '+1', country: 'US/CA' },
+  { code: '+91', country: 'India' },
+  { code: '+44', country: 'UK' },
+  { code: '+86', country: 'China' },
+  { code: '+81', country: 'Japan' },
+  { code: '+49', country: 'Germany' },
+  { code: '+33', country: 'France' },
+  { code: '+39', country: 'Italy' },
+  { code: '+34', country: 'Spain' },
+  { code: '+61', country: 'Australia' },
+  { code: '+7', country: 'Russia' },
+  { code: '+82', country: 'South Korea' },
+  { code: '+55', country: 'Brazil' },
+  { code: '+52', country: 'Mexico' },
+  { code: '+971', country: 'UAE' },
+  { code: '+966', country: 'Saudi Arabia' },
+  { code: '+65', country: 'Singapore' },
+  { code: '+60', country: 'Malaysia' },
+  { code: '+62', country: 'Indonesia' },
+  { code: '+27', country: 'South Africa' },
+];
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -28,7 +56,16 @@ const Checkout = () => {
     city: '',
     postalCode: '',
     country: '',
+    countryCode: '+91', // Default to India
     phone: '',
+  });
+  const [phoneError, setPhoneError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({
+    fullName: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
   });
 
   useEffect(() => {
@@ -49,18 +86,89 @@ const Checkout = () => {
   };
 
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    
+    // Handle phone number - only allow digits
+    if (name === 'phone') {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      // Limit to 15 digits (max phone number length)
+      const limitedDigits = digitsOnly.slice(0, 15);
+      
+      setShippingAddress({
+        ...shippingAddress,
+        phone: limitedDigits,
+      });
+      
+      // Validate phone number length
+      if (limitedDigits.length > 0 && limitedDigits.length < 10) {
+        setPhoneError('Phone number must be at least 10 digits');
+      } else if (limitedDigits.length > 15) {
+        setPhoneError('Phone number cannot exceed 15 digits');
+      } else {
+        setPhoneError('');
+      }
+    } else {
+      setShippingAddress({
+        ...shippingAddress,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleCountryCodeChange = (e) => {
     setShippingAddress({
       ...shippingAddress,
-      [e.target.name]: e.target.value,
+      countryCode: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setPhoneError('');
+    setFieldErrors({
+      fullName: '',
+      address: '',
+      city: '',
+      postalCode: '',
+      country: '',
+    });
 
     if (!cart || cart.items.length === 0) {
       setError('Cart is empty');
+      return;
+    }
+
+    // Validate all required fields
+    const errors = {};
+    if (!shippingAddress.fullName.trim()) {
+      errors.fullName = 'Full name is required';
+    }
+    if (!shippingAddress.address.trim()) {
+      errors.address = 'Address is required';
+    }
+    if (!shippingAddress.city.trim()) {
+      errors.city = 'City is required';
+    }
+    if (!shippingAddress.postalCode.trim()) {
+      errors.postalCode = 'Postal code is required';
+    }
+    if (!shippingAddress.country.trim()) {
+      errors.country = 'Country is required';
+    }
+    
+    let hasPhoneError = false;
+    if (!shippingAddress.phone || shippingAddress.phone.length < 10) {
+      setPhoneError('Phone number must be at least 10 digits');
+      hasPhoneError = true;
+    } else if (shippingAddress.phone.length > 15) {
+      setPhoneError('Phone number cannot exceed 15 digits');
+      hasPhoneError = true;
+    }
+
+    if (Object.keys(errors).length > 0 || hasPhoneError) {
+      setFieldErrors(errors);
       return;
     }
 
@@ -69,12 +177,41 @@ const Checkout = () => {
       const taxPrice = cart.totalPrice * 0.18;
       const totalPrice = cart.totalPrice + shippingPrice + taxPrice;
 
-      const order = await createOrder(shippingAddress, 'razorpay');
+      // Combine country code and phone number for storage
+      const fullPhoneNumber = `${shippingAddress.countryCode}${shippingAddress.phone}`;
+      const orderData = {
+        ...shippingAddress,
+        phone: fullPhoneNumber,
+      };
+
+      const order = await createOrder(orderData, 'razorpay');
       showNotification('Order created successfully', 'success');
       navigate('/payment', { state: { order, totalPrice } });
     } catch (err) {
+      // Parse backend validation errors
       const errorMsg = err.response?.data?.message || 'Error creating order';
-      setError(errorMsg);
+      const errors = {};
+      
+      // Check if error message contains field-specific errors
+      if (errorMsg.includes('shippingAddress.')) {
+        const errorParts = errorMsg.split(',').map(part => part.trim());
+        errorParts.forEach(part => {
+          if (part.includes('fullName')) {
+            errors.fullName = 'Full name is required';
+          } else if (part.includes('address')) {
+            errors.address = 'Address is required';
+          } else if (part.includes('city')) {
+            errors.city = 'City is required';
+          } else if (part.includes('postalCode')) {
+            errors.postalCode = 'Postal code is required';
+          } else if (part.includes('country')) {
+            errors.country = 'Country is required';
+          }
+        });
+        setFieldErrors(errors);
+      } else {
+        setError(errorMsg);
+      }
       showNotification(errorMsg, 'error');
     }
   };
@@ -158,6 +295,8 @@ const Checkout = () => {
                       value={shippingAddress.fullName}
                       onChange={handleInputChange}
                       required
+                      error={!!fieldErrors.fullName}
+                      helperText={fieldErrors.fullName}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -170,6 +309,8 @@ const Checkout = () => {
                       required
                       multiline
                       rows={3}
+                      error={!!fieldErrors.address}
+                      helperText={fieldErrors.address}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -180,6 +321,8 @@ const Checkout = () => {
                       value={shippingAddress.city}
                       onChange={handleInputChange}
                       required
+                      error={!!fieldErrors.city}
+                      helperText={fieldErrors.city}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -190,6 +333,8 @@ const Checkout = () => {
                       value={shippingAddress.postalCode}
                       onChange={handleInputChange}
                       required
+                      error={!!fieldErrors.postalCode}
+                      helperText={fieldErrors.postalCode}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -200,16 +345,66 @@ const Checkout = () => {
                       value={shippingAddress.country}
                       onChange={handleInputChange}
                       required
+                      error={!!fieldErrors.country}
+                      helperText={fieldErrors.country}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="Phone"
+                      label="Phone Number"
                       name="phone"
                       value={shippingAddress.phone}
                       onChange={handleInputChange}
                       required
+                      error={!!phoneError}
+                      helperText={phoneError || 'Enter 10-15 digits'}
+                      inputProps={{
+                        inputMode: 'numeric',
+                        pattern: '[0-9]*',
+                        maxLength: 15,
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FormControl variant="standard" sx={{ minWidth: 100 }}>
+                              <Select
+                                value={shippingAddress.countryCode}
+                                onChange={handleCountryCodeChange}
+                                sx={{
+                                  '& .MuiSelect-select': {
+                                    py: 0.5,
+                                    px: 1,
+                                    fontSize: '0.875rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 0.5,
+                                    border: 'none',
+                                  },
+                                  '&:before': {
+                                    borderBottom: 'none',
+                                  },
+                                  '&:after': {
+                                    borderBottom: 'none',
+                                  },
+                                  '&:hover:not(.Mui-disabled):before': {
+                                    borderBottom: 'none',
+                                  },
+                                }}
+                              >
+                                {countryCodes.map((country) => (
+                                  <MenuItem key={country.code} value={country.code}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                      <span>{country.code}</span>
+                                      <span>{country.country}</span>
+                                    </Box>
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                   </Grid>
                 </Grid>

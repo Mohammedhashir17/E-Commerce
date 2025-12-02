@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -35,7 +35,7 @@ import {
   FitnessCenter,
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
-import { getCart, getAllCategories } from '../../services/backend-service';
+import { getCart, getAllCategories, getWishlist } from '../../services/backend-service';
 
 // Category icons mapping
 const getCategoryIcon = (categoryName) => {
@@ -55,8 +55,10 @@ const getCategoryIcon = (categoryName) => {
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { user, logout } = useAuth();
   const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,9 +81,31 @@ const Navbar = () => {
         setCartCount(count);
       }
     };
+
+    const fetchWishlistCount = async () => {
+      if (user) {
+        try {
+          const wishlist = await getWishlist();
+          const count = wishlist.products?.length || 0;
+          setWishlistCount(count);
+        } catch (error) {
+          console.error('Error fetching wishlist:', error);
+          setWishlistCount(0);
+        }
+      } else {
+        // For guest users, wishlist is not stored locally, so count is 0
+        setWishlistCount(0);
+      }
+    };
+
     fetchCartCount();
+    fetchWishlistCount();
     fetchCategories();
-  }, [user, location]);
+    
+    // Sync selectedCategory with URL
+    const categoryFromUrl = searchParams.get('category') || '';
+    setSelectedCategory(categoryFromUrl);
+  }, [user, location, searchParams]);
 
   const fetchCategories = async () => {
     try {
@@ -115,6 +139,12 @@ const Navbar = () => {
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(categoryName);
     navigate(`/products?category=${encodeURIComponent(categoryName)}`);
+  };
+
+  const handleAllClick = () => {
+    setSelectedCategory('');
+    // Navigate to home page which has banner and all products
+    navigate('/');
   };
 
   return (
@@ -227,7 +257,9 @@ const Navbar = () => {
                 p: { xs: 0.75, sm: 1 }
               }}
             >
-              <Favorite sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+              <Badge badgeContent={wishlistCount} color="error">
+                <Favorite sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
+              </Badge>
             </IconButton>
 
             <IconButton 
@@ -267,11 +299,6 @@ const Navbar = () => {
                   <MenuItem onClick={() => { navigate('/orders'); handleMenuClose(); }}>
                     My Orders
                   </MenuItem>
-                  {user.role === 'admin' && (
-                    <MenuItem onClick={() => { navigate('/admin'); handleMenuClose(); }}>
-                      Admin Panel
-                    </MenuItem>
-                  )}
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </>
@@ -316,10 +343,7 @@ const Navbar = () => {
           <Chip
             icon={<Home sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }} />}
             label="All"
-            onClick={() => {
-              setSelectedCategory('');
-              navigate('/products');
-            }}
+            onClick={handleAllClick}
             sx={{
               bgcolor: selectedCategory === '' ? 'white' : 'transparent',
               color: selectedCategory === '' ? 'primary.main' : 'white',

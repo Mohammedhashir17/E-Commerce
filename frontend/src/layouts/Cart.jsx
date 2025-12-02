@@ -180,64 +180,87 @@ const Cart = () => {
 
       <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} md={8}>
-          {cart.items.map((item) => (
-            <Paper key={item._id || item.product?._id} sx={{ p: { xs: 1.5, sm: 2 }, mb: { xs: 1.5, sm: 2 } }}>
-              <Grid container spacing={{ xs: 1.5, sm: 2 }} alignItems="center">
-                <Grid item xs={4} sm={3}>
-                  <Box
-                    component="img"
-                    src={item.product?.image || item.image || '/placeholder.jpg'}
-                    alt={item.product?.name || item.name}
-                    sx={{ 
-                      width: '100%', 
-                      borderRadius: 1,
-                      aspectRatio: '1/1',
-                      objectFit: 'cover'
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={8} sm={4}>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      fontSize: { xs: '0.875rem', sm: '1rem' },
-                      fontWeight: { xs: 600, sm: 700 },
-                      mb: { xs: 0.5, sm: 1 },
-                      lineHeight: 1.3
-                    }}
-                  >
-                    {item.product?.name || item.name}
-                  </Typography>
-                  <Typography 
-                    variant="body2" 
-                    color="text.secondary" 
-                    sx={{ 
-                      fontSize: { xs: '0.7rem', sm: '0.875rem' } 
-                    }}
-                  >
-                    ₹{item.price} each
-                  </Typography>
-                </Grid>
+          {cart.items.map((item) => {
+            const productId = item.product?._id || item.productId || item._id;
+            return (
+              <Paper 
+                key={item._id || item.product?._id} 
+                sx={{ 
+                  p: { xs: 1.5, sm: 2 }, 
+                  mb: { xs: 1.5, sm: 2 },
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    boxShadow: 4,
+                    transform: 'translateY(-2px)'
+                  }
+                }}
+                onClick={() => {
+                  if (productId) {
+                    navigate(`/products/${productId}`);
+                  }
+                }}
+              >
+                <Grid container spacing={{ xs: 1.5, sm: 2 }} alignItems="center">
+                  <Grid item xs={4} sm={3}>
+                    <Box
+                      component="img"
+                      src={item.product?.image || item.image || '/placeholder.jpg'}
+                      alt={item.product?.name || item.name}
+                      sx={{ 
+                        width: '100%', 
+                        borderRadius: 1,
+                        aspectRatio: '1/1',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={8} sm={4}>
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        fontSize: { xs: '0.875rem', sm: '1rem' },
+                        fontWeight: { xs: 600, sm: 700 },
+                        mb: { xs: 0.5, sm: 1 },
+                        lineHeight: 1.3
+                      }}
+                    >
+                      {item.product?.name || item.name}
+                    </Typography>
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary" 
+                      sx={{ 
+                        fontSize: { xs: '0.7rem', sm: '0.875rem' } 
+                      }}
+                    >
+                      ₹{item.price} each
+                    </Typography>
+                  </Grid>
                 <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'center' } }}>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    gap: 0.5,
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: 1,
-                    width: 'fit-content',
-                    mx: 'auto',
-                  }}>
+                  <Box 
+                    onClick={(e) => e.stopPropagation()}
+                    sx={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      gap: 0.5,
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      width: 'fit-content',
+                      mx: 'auto',
+                    }}
+                  >
                     <IconButton
                       size="small"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         handleUpdateQuantity(
                           item._id || item.product?._id,
                           (item.quantity || 1) - 1
-                        )
-                      }
+                        );
+                      }}
                       disabled={item.quantity <= 1}
                       sx={{ 
                         borderRadius: '4px 0 0 4px',
@@ -249,12 +272,14 @@ const Cart = () => {
                     <TextField
                       type="number"
                       value={item.quantity || 1}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        e.stopPropagation();
                         handleUpdateQuantity(
                           item._id || item.product?._id,
                           parseInt(e.target.value) || 1
-                        )
-                      }
+                        );
+                      }}
+                      onClick={(e) => e.stopPropagation()}
                       inputProps={{ 
                         min: 1,
                         style: { textAlign: 'center', padding: '8px 4px' }
@@ -269,12 +294,13 @@ const Cart = () => {
                     />
                     <IconButton
                       size="small"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         handleUpdateQuantity(
                           item._id || item.product?._id,
                           (item.quantity || 1) + 1
-                        )
-                      }
+                        );
+                      }}
                       sx={{ 
                         borderRadius: '0 4px 4px 0',
                         '&:hover': { bgcolor: 'action.hover' }
@@ -285,13 +311,16 @@ const Cart = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center', 
-                    gap: 1,
-                    flexDirection: { xs: 'row', sm: 'row' }
-                  }}>
+                  <Box 
+                    onClick={(e) => e.stopPropagation()}
+                    sx={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      alignItems: 'center', 
+                      gap: 1,
+                      flexDirection: { xs: 'row', sm: 'row' }
+                    }}
+                  >
                     <Typography 
                       variant="h6" 
                       sx={{ 
@@ -304,7 +333,10 @@ const Cart = () => {
                     <IconButton
                       color="error"
                       size="small"
-                      onClick={() => handleRemoveItem(item._id || item.product?._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveItem(item._id || item.product?._id);
+                      }}
                     >
                       <Delete sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
                     </IconButton>
@@ -312,7 +344,8 @@ const Cart = () => {
                 </Grid>
               </Grid>
             </Paper>
-          ))}
+            );
+          })}
 
           <Button
             variant="outlined"
