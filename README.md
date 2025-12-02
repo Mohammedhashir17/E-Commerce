@@ -57,13 +57,13 @@ npm install
 
 3. Create a `.env` file in the backend directory:
 ```env
-PORT=5000
-MONGODB_URI=mongodb+srv://root:amh%400203@e-commerce.felcyk3.mongodb.net/ecommerce?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_key_change_in_production
-RAZORPAY_KEY_ID=your_razorpay_key_id
-RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-EMAIL_USER=projecthubvnb@gmail.com
-EMAIL_PASS=your-gmail-app-password
+PORT=
+MONGODB_URI=
+JWT_SECRET=
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+EMAIL_USER=
+EMAIL_PASS=
 ```
 
 **Important**: 
