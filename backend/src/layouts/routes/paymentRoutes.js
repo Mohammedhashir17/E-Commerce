@@ -8,10 +8,16 @@ const router = express.Router();
 router.post('/create-order', protect, async (req, res) => {
   try {
     const { amount } = req.body;
+    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ message: 'Invalid amount provided' });
+    }
+
     const order = await createRazorpayOrder(amount);
     res.json(order);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Payment order creation error:', error);
+    res.status(500).json({ message: error.message || 'Failed to create payment order' });
   }
 });
 

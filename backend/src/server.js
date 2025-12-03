@@ -12,6 +12,14 @@ import paymentRoutes from './layouts/routes/paymentRoutes.js';
 
 dotenv.config();
 
+// Verify Razorpay configuration on startup
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  console.log('✅ Razorpay API keys loaded successfully');
+} else {
+  console.warn('⚠️  Warning: Razorpay API keys not found in .env file');
+  console.warn('   Payment gateway will not work until keys are configured.');
+}
+
 connectDB();
 
 const app = express();
