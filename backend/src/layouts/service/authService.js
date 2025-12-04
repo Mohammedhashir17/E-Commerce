@@ -49,6 +49,7 @@ export const verifyOTPAndLogin = async (email, otp) => {
     _id: user._id,
     name: user.name,
     email: user.email,
+    mobileNumber: user.mobileNumber,
     role: user.role,
     token: generateToken(user._id),
   };
@@ -79,7 +80,7 @@ export const sendOTPForRegister = async (email) => {
 };
 
 export const verifyOTPAndRegister = async (userData, otp) => {
-  const { name, email, password } = userData;
+  const { name, email, password, mobileNumber } = userData;
 
   // Verify OTP
   const verification = verifyOTP(email, otp);
@@ -92,6 +93,7 @@ export const verifyOTPAndRegister = async (userData, otp) => {
     name,
     email,
     password,
+    mobileNumber: mobileNumber ? mobileNumber.trim() : undefined,
   });
 
   if (user) {
@@ -99,6 +101,7 @@ export const verifyOTPAndRegister = async (userData, otp) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      mobileNumber: user.mobileNumber,
       token: generateToken(user._id),
     };
   } else {
@@ -107,7 +110,7 @@ export const verifyOTPAndRegister = async (userData, otp) => {
 };
 
 export const registerUser = async (userData) => {
-  const { name, email, password } = userData;
+  const { name, email, password, mobileNumber } = userData;
 
   // Validate email
   if (!validateEmail(email)) {
@@ -128,6 +131,7 @@ export const registerUser = async (userData) => {
     name,
     email,
     password,
+    mobileNumber: mobileNumber ? mobileNumber.trim() : undefined,
   });
 
   if (user) {
@@ -135,6 +139,7 @@ export const registerUser = async (userData) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      mobileNumber: user.mobileNumber,
       token: generateToken(user._id),
     };
   } else {
@@ -159,6 +164,7 @@ export const loginUser = async (email, password) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      mobileNumber: user.mobileNumber,
       role: user.role,
       token: generateToken(user._id),
     };

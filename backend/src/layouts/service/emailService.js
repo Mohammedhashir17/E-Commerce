@@ -42,28 +42,31 @@ export const sendOTPEmail = async (email, otp, purpose = 'login') => {
     to: email,
     subject: `Your ${purposeText} OTP Code`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-        <div style="background-color: #835DC2; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-          <h1 style="margin: 0; font-size: 24px;">E-Commerce</h1>
+      <div style="font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #050509;">
+        <div style="background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%); color: #FFFFFF; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; box-shadow: 0 18px 40px rgba(108, 43, 217, 0.3);">
+          <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 1px;">E-Commerce</h1>
         </div>
-        <div style="background-color: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <h2 style="color: #333; margin-top: 0;">Your ${purposeText} OTP Code</h2>
-          <p style="color: #666; font-size: 16px; line-height: 1.6;">
+        <div style="background-color: #0D0D16; padding: 40px; border-radius: 0 0 12px 12px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75); border: 1px solid #262638;">
+          <h2 style="color: #FFFFFF; margin-top: 0; font-size: 22px; font-weight: 600; margin-bottom: 20px;">Your ${purposeText} OTP Code</h2>
+          <p style="color: #B3B3C2; font-size: 16px; line-height: 1.6; margin-bottom: 10px;">
             Hello,
           </p>
-          <p style="color: #666; font-size: 16px; line-height: 1.6;">
+          <p style="color: #B3B3C2; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
             You requested an OTP code for ${purpose === 'login' ? 'logging into' : 'registering with'} your account.
           </p>
-          <div style="background-color: #F4F2FF; border: 2px dashed #835DC2; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0;">
-            <p style="color: #666; font-size: 14px; margin: 0 0 10px 0;">Your OTP Code:</p>
-            <h1 style="color: #835DC2; font-size: 36px; font-weight: bold; margin: 0; letter-spacing: 8px;">${otp}</h1>
+          <div style="background: linear-gradient(135deg, rgba(108, 43, 217, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border: 2px dashed #6C2BD9; border-radius: 12px; padding: 25px 10px; text-align: center; margin: 30px 0; backdrop-filter: blur(10px); min-width: 0;">
+            <p style="color: #B3B3C2; font-size: 14px; margin: 0 0 15px 0; font-weight: 500;">Your OTP Code:</p>
+            <h1 style="color: #8B5CF6; font-size: 38px; font-weight: 700; margin: 0; letter-spacing: 5px; text-shadow: 0 0 20px rgba(139, 92, 246, 0.5); white-space: nowrap; display: inline-block; word-break: keep-all; overflow-wrap: normal;">${otp}</h1>
           </div>
-          <p style="color: #666; font-size: 14px; line-height: 1.6;">
-            This code will expire in <strong>5 minutes</strong>. Please do not share this code with anyone.
+          <p style="color: #B3B3C2; font-size: 14px; line-height: 1.6; margin-top: 30px;">
+            This code will expire in <strong style="color: #FFFFFF;">5 minutes</strong>. Please do not share this code with anyone.
           </p>
-          <p style="color: #999; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+          <p style="color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #262638; line-height: 1.6;">
             If you didn't request this code, please ignore this email.
           </p>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <p style="color: #666; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} E-Commerce. All rights reserved.</p>
         </div>
       </div>
     `,

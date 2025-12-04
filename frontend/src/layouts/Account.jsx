@@ -72,6 +72,14 @@ const Account = () => {
               </Typography>
               <Typography variant="body1">{user?.email}</Typography>
             </Box>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                Mobile Number
+              </Typography>
+              <Typography variant="body1">
+                {user?.mobileNumber || 'Not provided'}
+              </Typography>
+            </Box>
           </Box>
 
           <Divider sx={{ my: 3 }} />

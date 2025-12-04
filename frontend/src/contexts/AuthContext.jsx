@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }) => {
       _id: userData._id,
       name: userData.name,
       email: userData.email,
+      mobileNumber: userData.mobileNumber,
     });
     return userData;
   };
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }) => {
       _id: response._id,
       name: response.name,
       email: response.email,
+      mobileNumber: response.mobileNumber,
     });
     return response;
   };
@@ -66,6 +68,7 @@ export const AuthProvider = ({ children }) => {
       _id: userData._id,
       name: userData.name,
       email: userData.email,
+      mobileNumber: userData.mobileNumber,
     });
   };
 

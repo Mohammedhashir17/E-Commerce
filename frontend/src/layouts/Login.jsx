@@ -31,6 +31,7 @@ const Login = () => {
     name: '',
     email: '',
     password: '',
+    mobileNumber: '',
     otp: '',
   });
   const [error, setError] = useState('');
@@ -74,7 +75,7 @@ const Login = () => {
         showNotification('OTP sent to your email! Check your inbox.', 'success');
       } else {
         // Register - validate all fields
-        if (!formData.name || !formData.password) {
+        if (!formData.name || !formData.password || !formData.mobileNumber) {
           setError('Please fill all fields');
           showNotification('Please fill all fields', 'error');
           setLoading(false);
@@ -83,6 +84,14 @@ const Login = () => {
         if (formData.password.length < 6) {
           setError('Password must be at least 6 characters');
           showNotification('Password must be at least 6 characters', 'error');
+          setLoading(false);
+          return;
+        }
+        // Validate mobile number (10 digits)
+        const cleanedMobile = formData.mobileNumber.replace(/\D/g, '');
+        if (cleanedMobile.length !== 10) {
+          setError('Please enter a valid 10-digit mobile number');
+          showNotification('Please enter a valid 10-digit mobile number', 'error');
           setLoading(false);
           return;
         }
@@ -122,11 +131,13 @@ const Login = () => {
         navigate('/');
       } else {
         // Register
+        const cleanedMobile = formData.mobileNumber.replace(/\D/g, '');
         const userData = await verifyOTPAndRegister(
           {
             name: formData.name,
             email: formData.email,
             password: formData.password,
+            mobileNumber: cleanedMobile,
           },
           formData.otp
         );
@@ -155,7 +166,7 @@ const Login = () => {
     setTab(newValue);
     setStep('email');
     setOtpSent(false);
-    setFormData({ name: '', email: '', password: '', otp: '' });
+    setFormData({ name: '', email: '', password: '', mobileNumber: '', otp: '' });
     setError('');
   };
 
@@ -230,6 +241,21 @@ const Login = () => {
                 required
                 margin="normal"
                 helperText="Minimum 6 characters"
+              />
+            )}
+            {tab === 1 && (
+              <TextField
+                fullWidth
+                label="Mobile Number"
+                name="mobileNumber"
+                type="tel"
+                value={formData.mobileNumber}
+                onChange={handleChange}
+                required
+                margin="normal"
+                placeholder="1234567890"
+                helperText="Enter 10-digit mobile number"
+                inputProps={{ maxLength: 10, pattern: '[0-9]*' }}
               />
             )}
             <Button

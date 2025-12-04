@@ -45,8 +45,8 @@ router.post('/send-otp-register', async (req, res) => {
 
 router.post('/verify-otp-register', async (req, res) => {
   try {
-    const { name, email, password, otp } = req.body;
-    const user = await verifyOTPAndRegister({ name, email, password }, otp);
+    const { name, email, password, mobileNumber, otp } = req.body;
+    const user = await verifyOTPAndRegister({ name, email, password, mobileNumber }, otp);
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
