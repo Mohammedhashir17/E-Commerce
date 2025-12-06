@@ -56,6 +56,11 @@ const theme = createTheme({
         body: {
           backgroundColor: colors.bgMain,
           color: colors.textPrimary,
+          backgroundImage: 'url(/images/website-background.jpg)',
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         },
       },
     },

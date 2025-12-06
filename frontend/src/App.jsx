@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { CartWishlistProvider } from './contexts/CartWishlistContext';
@@ -17,26 +17,35 @@ import Payment from './layouts/Payment';
 import Orders from './layouts/Orders';
 import Account from './layouts/Account';
 
+const AppContent = () => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+
+  return (
+    <div style={{ position: 'relative', zIndex: 1 }}>
+      {!isLoginPage && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/products" element={<ProductListing />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/account" element={<Account />} />
+      </Routes>
+    </div>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
       <CartWishlistProvider>
         <NotificationProvider>
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/products" element={<ProductListing />} />
-              <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/wishlist" element={<Wishlist />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/payment" element={<Payment />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/account" element={<Account />} />
-            </Routes>
-          </div>
+          <AppContent />
         </NotificationProvider>
       </CartWishlistProvider>
     </AuthProvider>

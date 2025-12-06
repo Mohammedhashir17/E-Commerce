@@ -11,7 +11,9 @@ import {
   Tab,
   Tabs,
   CircularProgress,
+  IconButton,
 } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotification } from '../contexts/NotificationContext';
 import {
@@ -170,6 +172,10 @@ const Login = () => {
     setError('');
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Container 
       maxWidth="sm" 
@@ -179,6 +185,19 @@ const Login = () => {
         px: { xs: 2, sm: 3 }
       }}
     >
+      <Box sx={{ mb: 2 }}>
+        <IconButton
+          onClick={handleGoBack}
+          sx={{
+            color: 'text.primary',
+            '&:hover': {
+              bgcolor: 'rgba(108, 43, 217, 0.1)',
+            },
+          }}
+        >
+          <ArrowBack />
+        </IconButton>
+      </Box>
       <Paper elevation={3} sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
         <Typography 
           variant="h4" 

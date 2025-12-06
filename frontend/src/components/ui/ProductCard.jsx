@@ -105,17 +105,36 @@ const ProductCard = ({ product, isWishlisted = false, onWishlistChange }) => {
             position: 'absolute',
             top: { xs: 4, sm: 8 },
             right: { xs: 4, sm: 8 },
-            bgcolor: 'rgba(255,255,255,0.9)',
-            '&:hover': { bgcolor: 'rgba(255,255,255,1)' },
+            bgcolor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(8px)',
+            '&:hover': { 
+              bgcolor: 'rgba(0, 0, 0, 0.8)',
+              transform: 'scale(1.1)',
+            },
             p: { xs: 0.5, sm: 1 },
             zIndex: 1,
+            transition: 'all 0.2s ease-in-out',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
           }}
           onClick={handleWishlistToggle}
         >
           {isWishlisted ? (
-            <Favorite color="error" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
+            <Favorite 
+              sx={{ 
+                fontSize: { xs: '1rem', sm: '1.25rem' },
+                color: '#ff1744',
+                filter: 'drop-shadow(0 0 4px rgba(255, 23, 68, 0.6))',
+              }} 
+            />
           ) : (
-            <FavoriteBorder sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
+            <FavoriteBorder 
+              sx={{ 
+                fontSize: { xs: '1rem', sm: '1.25rem' },
+                color: '#ffffff',
+                filter: 'drop-shadow(0 0 2px rgba(0, 0, 0, 0.5))',
+              }} 
+            />
           )}
         </IconButton>
         {product.stock === 0 && (
