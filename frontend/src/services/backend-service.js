@@ -82,6 +82,17 @@ export const verifyOTPAndRegister = async (userData, otp) => {
   return response.data;
 };
 
+// Forgot Password APIs
+export const sendForgotPasswordOTP = async (email) => {
+  const response = await HttpService.post('/auth/forgot-password', { email });
+  return response.data;
+};
+
+export const resetPasswordWithOTP = async (email, otp, newPassword) => {
+  const response = await HttpService.post('/auth/reset-password', { email, otp, newPassword });
+  return response.data;
+};
+
 // Product APIs
 export const getAllProducts = async (filters = {}) => {
   const response = await HttpService.get('/products', { params: filters });

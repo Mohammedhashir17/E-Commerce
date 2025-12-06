@@ -181,3 +181,65 @@ export const getUserProfile = async (userId) => {
   return user;
 };
 
+export const sendForgotPasswordOTP = async (email) => {
+  // Validate email format
+  if (!validateEmail(email)) {
+    throw new Error('Invalid email format');
+  }
+
+  // Check if user exists
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('User not found. Please check your email address.');
+  }
+
+  // Check if user has mobile number
+  if (!user.mobileNumber) {
+    throw new Error('Mobile number not registered. Please contact support.');
+  }
+
+  // Generate and send OTP to mobile
+  const { generateOTP, sendOTPToMobile } = await import('./otpService.js');
+  const otp = generateOTP();
+  await sendOTPToMobile(user.mobileNumber, otp, 'reset-password');
+
+  return { 
+    message: 'OTP sent to your registered mobile number',
+    mobileNumber: user.mobileNumber.replace(/(\d{2})(\d{4})(\d{4})/, '$1****$3') // Mask mobile number
+  };
+};
+
+export const resetPasswordWithOTP = async (email, otp, newPassword) => {
+  // Validate email
+  if (!validateEmail(email)) {
+    throw new Error('Invalid email format');
+  }
+
+  // Validate password
+  if (!newPassword || newPassword.length < 6) {
+    throw new Error('Password must be at least 6 characters');
+  }
+
+  // Get user
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Verify OTP from mobile
+  const { verifyMobileOTP } = await import('./otpService.js');
+  const verification = verifyMobileOTP(user.mobileNumber, otp);
+  
+  if (!verification.valid) {
+    throw new Error(verification.message);
+  }
+
+  // Update password
+  user.password = newPassword;
+  await user.save();
+
+  return {
+    message: 'Password reset successfully. Please login with your new password.',
+  };
+};
+

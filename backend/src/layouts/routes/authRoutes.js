@@ -7,6 +7,8 @@ import {
   verifyOTPAndLogin,
   sendOTPForRegister,
   verifyOTPAndRegister,
+  sendForgotPasswordOTP,
+  resetPasswordWithOTP,
 } from '../service/authService.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -79,6 +81,27 @@ router.get('/profile', protect, async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+});
+
+// Forgot Password Routes
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const result = await sendForgotPasswordOTP(email);
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const result = await resetPasswordWithOTP(email, otp, newPassword);
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 });
 
