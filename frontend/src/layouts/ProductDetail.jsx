@@ -139,7 +139,7 @@ const ProductDetail = () => {
       <Button
         startIcon={<ArrowBack />}
         onClick={() => navigate(-1)}
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, color: 'white' }}
       >
         Back
       </Button>

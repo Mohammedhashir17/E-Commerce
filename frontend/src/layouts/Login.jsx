@@ -598,10 +598,10 @@ const Login = () => {
   };
 
   return (
-    <Container 
-      maxWidth="sm" 
-      sx={{ 
-        mt: { xs: 4, sm: 6, md: 8 }, 
+    <Container
+      maxWidth="sm"
+      sx={{
+        mt: { xs: 4, sm: 6, md: 8 },
         mb: { xs: 2, sm: 3, md: 4 },
         px: { xs: 2, sm: 3 }
       }}
@@ -620,19 +620,19 @@ const Login = () => {
         </IconButton>
       </Box>
       <Paper elevation={3} sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
-        <Typography 
-          variant="h4" 
-          align="center" 
-          gutterBottom 
-          sx={{ 
-            color: 'primary.main', 
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{
+            color: 'primary.main',
             mb: { xs: 2, sm: 3 },
             fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
           }}
         >
-          {step === 'forgot-password' ? 'Forgot Password' : 
-           step === 'reset-password' ? 'Reset Password' : 
-           tab === 0 ? 'Login' : 'Register'}
+          {step === 'forgot-password' ? 'Forgot Password' :
+            step === 'reset-password' ? 'Reset Password' :
+              tab === 0 ? 'Login' : 'Register'}
         </Typography>
 
         {step !== 'forgot-password' && step !== 'reset-password' && (

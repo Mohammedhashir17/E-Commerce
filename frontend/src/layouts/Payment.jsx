@@ -327,8 +327,8 @@ const Payment = () => {
                 variant="outlined"
                 onClick={() => navigate('/checkout')}
                 sx={{
-                  borderColor: 'primary.main',
-                  color: 'primary.main',
+                  borderColor: 'white',
+                  color: 'white',
                   fontSize: { xs: '0.875rem', sm: '1rem' },
                   py: { xs: 1, sm: 1.5 },
                 }}

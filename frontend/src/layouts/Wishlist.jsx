@@ -86,17 +86,17 @@ const Wishlist = () => {
         px: { xs: 1, sm: 2, md: 3 }
       }}
     >
-      <Button
-        startIcon={<ArrowBack sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />}
-        onClick={() => navigate(-1)}
-        sx={{ 
-          mb: { xs: 1.5, sm: 2 }, 
-          color: 'primary.main',
-          fontSize: { xs: '0.875rem', sm: '1rem' }
-        }}
-      >
-        Back
-      </Button>
+        <Button
+          startIcon={<ArrowBack sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />}
+          onClick={() => navigate(-1)}
+          sx={{ 
+            mb: { xs: 1.5, sm: 2 }, 
+            color: 'white',
+            fontSize: { xs: '0.875rem', sm: '1rem' }
+          }}
+        >
+          Back
+        </Button>
       <Typography 
         variant="h4" 
         gutterBottom 

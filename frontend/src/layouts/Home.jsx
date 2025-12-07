@@ -123,19 +123,21 @@ const Home = () => {
                     {category.name}
                   </Typography>
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     onClick={() => navigate(`/products?category=${encodeURIComponent(category.name)}`)}
                     sx={{
-                      borderColor: 'primary.main',
-                      color: 'primary.main',
+                      bgcolor: 'var(--border-subtle)',
+                      color: 'white',
+                      border: '1px solid var(--border-subtle)',
                       fontSize: { xs: '0.75rem', sm: '0.875rem' },
                       px: { xs: 1.5, sm: 2 },
                       py: { xs: 0.5, sm: 0.75 },
                       '&:hover': {
-                        borderColor: 'primary.dark',
-                        bgcolor: 'primary.main',
+                        bgcolor: '#2a2a3e',
+                        borderColor: 'var(--accent-purple)',
                         color: 'white',
                         transform: { xs: 'none', sm: 'translateY(-2px)' },
+                        boxShadow: '0 4px 12px rgba(108, 43, 217, 0.3)',
                       },
                       transition: 'all 0.3s ease',
                       alignSelf: { xs: 'flex-start', sm: 'center' }

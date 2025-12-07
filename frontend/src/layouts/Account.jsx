@@ -36,7 +36,7 @@ const Account = () => {
           onClick={() => navigate(-1)}
           sx={{ 
             mb: { xs: 1.5, sm: 2 }, 
-            color: 'primary.main',
+            color: 'white',
             fontSize: { xs: '0.875rem', sm: '1rem' }
           }}
         >

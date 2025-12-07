@@ -230,7 +230,7 @@ const Checkout = () => {
         <Button
           startIcon={<ArrowBack />}
           onClick={() => navigate('/cart')}
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, color: 'white' }}
         >
           Back to Cart
         </Button>

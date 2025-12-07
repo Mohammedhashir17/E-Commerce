@@ -168,7 +168,7 @@ const Cart = () => {
       <Button
         startIcon={<ArrowBack />}
         onClick={() => navigate(-1)}
-        sx={{ mb: 2, color: 'primary.main' }}
+        sx={{ mb: 2, color: 'white' }}
       >
         Back
       </Button>

@@ -87,7 +87,7 @@ const ProductListing = () => {
         <Button
           startIcon={<ArrowBack />}
           onClick={() => window.history.back()}
-          sx={{ mb: 2, color: 'primary.main' }}
+          sx={{ mb: 2, color: 'white' }}
         >
           Back
         </Button>
