@@ -7,7 +7,10 @@ import {
   updateOrderToDelivered,
 } from '../service/orderService.js';
 import { protect } from '../middleware/authMiddleware.js';
+<<<<<<< HEAD
 import { generateProductInvoice, generateOrderInvoice } from '../service/invoiceService.js';
+=======
+>>>>>>> d2173165bf9146200c6b469ea37f398582504076
 
 const router = express.Router();
 
@@ -51,6 +54,7 @@ router.get('/all', protect, async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 // Invoice download routes - must come before /:id route to avoid route conflict
 router.get('/:id/invoice/:productIndex', protect, async (req, res) => {
   try {
@@ -134,6 +138,12 @@ router.get('/:id', protect, async (req, res) => {
   try {
     // Prevent "all" and "scan" from being treated as an ID
     if (req.params.id === 'all' || req.params.id === 'scan') {
+=======
+router.get('/:id', protect, async (req, res) => {
+  try {
+    // Prevent "all" from being treated as an ID
+    if (req.params.id === 'all') {
+>>>>>>> d2173165bf9146200c6b469ea37f398582504076
       return res.status(404).json({ message: 'Order not found' });
     }
     const order = await getOrderById(req.params.id, req.user._id);
