@@ -1,0 +1,56 @@
+import React from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { CartWishlistProvider } from './contexts/CartWishlistContext';
+import Navbar from './components/ui/Navbar';
+
+// Layouts
+import Home from './layouts/Home';
+import Login from './layouts/Login';
+import ProductListing from './layouts/ProductListing';
+import ProductDetail from './layouts/ProductDetail';
+import Cart from './layouts/Cart';
+import Wishlist from './layouts/Wishlist';
+import Checkout from './layouts/Checkout';
+import Payment from './layouts/Payment';
+import Orders from './layouts/Orders';
+import Account from './layouts/Account';
+
+const AppContent = () => {
+  const location = useLocation();
+  const isLoginPage = location.pathname === '/login';
+
+  return (
+    <div style={{ position: 'relative', zIndex: 1 }}>
+      {!isLoginPage && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/products" element={<ProductListing />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/account" element={<Account />} />
+      </Routes>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <CartWishlistProvider>
+        <NotificationProvider>
+          <AppContent />
+        </NotificationProvider>
+      </CartWishlistProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;
+

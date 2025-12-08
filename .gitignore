@@ -1,0 +1,32 @@
+# Root directory .gitignore
+
+# Credentials and setup files (sensitive information)
+ADMIN_CREDENTIALS.md
+GIT_SETUP.md
+SETUP.md
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies (already in subdirectories, but adding here for completeness)
+node_modules/
+
