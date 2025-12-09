@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+// Point frontend to deployed backend
+const API_BASE_URL = 'https://zuka-backend.onrender.com/api/v1';
 
 const HttpService = {
   get: async (url, config = {}) => {
