@@ -54,7 +54,6 @@ export const getOrderById = (id) => api.get(`/orders/${id}`);
 export const updateOrderStatus = (id, status) => api.put(`/orders/${id}`, { status });
 export const updateOrderToDelivered = (id) => api.put(`/orders/${id}/deliver`);
 
-<<<<<<< HEAD
 // Invoice download - returns blob for PDF download
 export const downloadInvoice = async (orderId, productIndex = null) => {
   try {
@@ -86,10 +85,7 @@ export const downloadInvoice = async (orderId, productIndex = null) => {
   }
 };
 
-=======
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
 // Category APIs
 export const getCategories = () => api.get('/products/categories');
 
 export default api;
-

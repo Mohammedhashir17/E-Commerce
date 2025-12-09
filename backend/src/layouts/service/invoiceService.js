@@ -8,8 +8,8 @@ const generateBarcode = async (text) => {
     const png = await bwipjs.toBuffer({
       bcid: 'code128', // Barcode type
       text: text,
-      scale: 3,
-      height: 50,
+      scale: 2, // Reduced scale for smaller barcode
+      height: 40, // Reduced height
       includetext: true,
       textxalign: 'center',
     });
@@ -36,9 +36,10 @@ export const generateProductInvoice = async (orderId, productIndex) => {
     }
 
     const product = order.orderItems[productIndex];
+    // Custom size: A4 width (595) x 50% height (421 points)
     const doc = new PDFDocument({ 
-      size: [612, 792], // US Letter size
-      margins: { top: 50, bottom: 50, left: 50, right: 50 }
+      size: [595, 421], // A4 width x 50% height
+      margins: { top: 20, bottom: 20, left: 30, right: 30 }
     });
 
     // Create buffers to store PDF
@@ -49,135 +50,143 @@ export const generateProductInvoice = async (orderId, productIndex) => {
     // Colors matching the design (dark green and red)
     const darkGreen = '#006400';
     const red = '#FF0000';
+    const pageWidth = 595;
+    const pageHeight = 421;
+    const margin = 30;
+    const contentWidth = pageWidth - (margin * 2);
 
-    // Header Section
-    doc.rect(50, 50, 512, 80).stroke(darkGreen);
+    // Header Section - more compact
+    doc.rect(margin, 20, contentWidth, 45).stroke(darkGreen);
     
     // Logo box (left side)
-    doc.rect(60, 60, 100, 60).stroke(darkGreen);
-    doc.fontSize(16)
+    doc.rect(margin + 5, 25, 70, 35).stroke(darkGreen);
+    doc.fontSize(10)
        .fillColor(darkGreen)
        .font('Helvetica-Bold')
-       .text('LOGO', 65, 85, { width: 90, align: 'center' });
+       .text('LOGO', margin + 10, 35, { width: 60, align: 'center' });
 
     // Company name and priority mail (right side)
-    doc.rect(170, 60, 392, 60).stroke(darkGreen);
+    doc.rect(margin + 80, 25, contentWidth - 85, 35).stroke(darkGreen);
     
     // Company name section
-    doc.fontSize(14)
+    doc.fontSize(11)
        .fillColor(darkGreen)
        .font('Helvetica-Bold')
-       .text('NAME OF YOUR COMPANY', 175, 70, { width: 382, align: 'center' });
+       .text('ZUKA', margin + 85, 30, { width: contentWidth - 90, align: 'center' });
     
     // Priority mail section
-    doc.rect(170, 100, 392, 20).stroke(darkGreen);
-    doc.fontSize(12)
+    doc.rect(margin + 80, 45, contentWidth - 85, 15).stroke(darkGreen);
+    doc.fontSize(9)
        .fillColor(red)
        .font('Helvetica-Bold')
-       .text('PRIORITY MAIL', 175, 105, { width: 382, align: 'center' });
+       .text('PRIORITY MAIL', margin + 85, 48, { width: contentWidth - 90, align: 'center' });
 
-    let yPos = 150;
+    let yPos = 75;
 
-    // Sender and Recipient Information Section
-    doc.rect(50, yPos, 512, 120).stroke(darkGreen);
+    // Sender and Recipient Information Section - more compact
+    const addressHeight = 75;
+    doc.rect(margin, yPos, contentWidth, addressHeight).stroke(darkGreen);
     
     // Left column - From
-    doc.rect(50, yPos, 256, 120).stroke(darkGreen);
-    doc.fontSize(12)
+    doc.rect(margin, yPos, contentWidth / 2, addressHeight).stroke(darkGreen);
+    doc.fontSize(9)
        .fillColor(darkGreen)
        .font('Helvetica-Bold')
-       .text('From :', 60, yPos + 10);
+       .text('From :', margin + 5, yPos + 5);
     
-    doc.fontSize(10)
+    doc.fontSize(8)
        .font('Helvetica')
-       .text('Company Name', 60, yPos + 30);
-    doc.text('Address, City', 60, yPos + 45);
-    doc.text('ZIP, State', 60, yPos + 60);
+       .text('ZUKA', margin + 5, yPos + 18);
+    doc.text('12/14, Allah Bakhash Street,', margin + 5, yPos + 30);
+    doc.text('Tirupattur – 635601,', margin + 5, yPos + 42);
+    doc.text('Tirupattur District,', margin + 5, yPos + 54);
+    doc.text('Tamil Nadu, India.', margin + 5, yPos + 66);
 
     // Right column - To
-    doc.rect(306, yPos, 256, 120).stroke(darkGreen);
-    doc.fontSize(12)
+    doc.rect(margin + contentWidth / 2, yPos, contentWidth / 2, addressHeight).stroke(darkGreen);
+    doc.fontSize(9)
        .font('Helvetica-Bold')
-       .text('To :', 316, yPos + 10);
+       .text('To :', margin + contentWidth / 2 + 5, yPos + 5);
     
-    doc.fontSize(10)
+    doc.fontSize(8)
        .font('Helvetica')
-       .text(order.shippingAddress.fullName || 'N/A', 316, yPos + 30);
-    doc.text(order.shippingAddress.address || 'N/A', 316, yPos + 45);
-    doc.text(`${order.shippingAddress.city}, ${order.shippingAddress.postalCode}`, 316, yPos + 60);
-    doc.text(order.shippingAddress.state || order.shippingAddress.country || 'N/A', 316, yPos + 75);
+       .text(order.shippingAddress.fullName || 'N/A', margin + contentWidth / 2 + 5, yPos + 18);
+    doc.text(order.shippingAddress.address || 'N/A', margin + contentWidth / 2 + 5, yPos + 30);
+    doc.text(`${order.shippingAddress.city}, ${order.shippingAddress.postalCode}`, margin + contentWidth / 2 + 5, yPos + 42);
 
-    yPos = 290;
+    yPos = yPos + addressHeight + 5;
 
-    // Package Details and Reference Numbers Section
-    doc.rect(50, yPos, 512, 120).stroke(darkGreen);
+    // Package Details and Reference Numbers Section - more compact
+    const detailsHeight = 60;
+    doc.rect(margin, yPos, contentWidth, detailsHeight).stroke(darkGreen);
     
     // Left column - Package Details
-    doc.rect(50, yPos, 256, 120).stroke(darkGreen);
-    doc.fontSize(12)
+    doc.rect(margin, yPos, contentWidth / 2, detailsHeight).stroke(darkGreen);
+    doc.fontSize(9)
        .font('Helvetica-Bold')
-       .text('Package Details:', 60, yPos + 10);
+       .text('Package Details:', margin + 5, yPos + 5);
     
-    doc.fontSize(10)
+    doc.fontSize(8)
        .font('Helvetica')
-       .text(`Weight: ${product.quantity} unit(s)`, 60, yPos + 30);
-    doc.text(`Product Name: ${product.name}`, 60, yPos + 45);
-    doc.text(`Quantity: ${product.quantity}`, 60, yPos + 60);
-    doc.text(`Price: ₹${(product.price * product.quantity).toFixed(2)}`, 60, yPos + 75);
+       .text(`Weight: ${product.quantity} unit(s)`, margin + 5, yPos + 18);
+    doc.text(`Product: ${product.name}`, margin + 5, yPos + 30);
+    doc.text(`Qty: ${product.quantity} | ₹${(product.price * product.quantity).toFixed(2)}`, margin + 5, yPos + 42);
 
     // Right column - Lot and Reference Numbers
-    doc.rect(306, yPos, 256, 120).stroke(darkGreen);
-    doc.fontSize(12)
+    doc.rect(margin + contentWidth / 2, yPos, contentWidth / 2, detailsHeight).stroke(darkGreen);
+    doc.fontSize(9)
        .font('Helvetica-Bold')
-       .text('LOT NUMBER:', 316, yPos + 10);
+       .text('LOT NUMBER:', margin + contentWidth / 2 + 5, yPos + 5);
     
-    doc.fontSize(10)
+    doc.fontSize(8)
        .font('Helvetica')
-       .text(order._id.toString().slice(-8), 316, yPos + 30);
+       .text(order._id.toString().slice(-8), margin + contentWidth / 2 + 5, yPos + 18);
     
-    doc.fontSize(12)
+    doc.fontSize(9)
        .font('Helvetica-Bold')
-       .text('REF NUMBER:', 316, yPos + 50);
+       .text('REF NUMBER:', margin + contentWidth / 2 + 5, yPos + 32);
     
-    doc.fontSize(10)
+    doc.fontSize(8)
        .font('Helvetica')
-       .text(product.product?._id?.toString().slice(-8) || 'N/A', 316, yPos + 70);
+       .text(product.product?._id?.toString().slice(-8) || 'N/A', margin + contentWidth / 2 + 5, yPos + 45);
 
-    yPos = 430;
+    yPos = yPos + detailsHeight + 5;
 
-    // Barcode Section
-    doc.rect(50, yPos, 512, 150).stroke(darkGreen);
+    // Barcode Section - more compact
+    const barcodeHeight = 100;
+    doc.rect(margin, yPos, contentWidth, barcodeHeight).stroke(darkGreen);
     
     // Generate barcode with order ID and product index for easy scanning
     // Format: INV-{orderId}-{productIndex}
     const barcodeText = `INV-${order._id}-${productIndex}`;
     const barcodeImage = await generateBarcode(barcodeText);
     
-    // Add barcode image to PDF
-    doc.image(barcodeImage, 50 + (512 - 400) / 2, yPos + 20, { 
-      width: 400, 
-      height: 80,
-      align: 'center'
+    // Add barcode image to PDF - smaller size
+    const barcodeWidth = 300;
+    const barcodeImgHeight = 50;
+    doc.image(barcodeImage, margin + (contentWidth - barcodeWidth) / 2, yPos + 8, { 
+      width: barcodeWidth, 
+      height: barcodeImgHeight
     });
 
     // Handle with care text
-    doc.fontSize(14)
+    doc.fontSize(10)
        .fillColor(red)
        .font('Helvetica-Bold')
-       .text('HANDLE WITH CARE', 50, yPos + 110, { width: 512, align: 'center' });
+       .text('HANDLE WITH CARE', margin, yPos + 62, { width: contentWidth, align: 'center' });
 
     // Tracking number
     const trackingNumber = `00${order._id.toString().slice(-15)}`.padStart(15, '0');
-    doc.fontSize(12)
+    doc.fontSize(9)
        .fillColor(darkGreen)
        .font('Helvetica-Bold')
-       .text(`TRACKING: ${trackingNumber}`, 50, yPos + 130, { width: 512, align: 'center' });
+       .text(`TRACKING: ${trackingNumber}`, margin, yPos + 78, { width: contentWidth, align: 'center' });
 
     // Footer with order date
-    doc.fontSize(8)
+    doc.fontSize(7)
        .fillColor(darkGreen)
        .font('Helvetica')
-       .text(`Order Date: ${new Date(order.createdAt).toLocaleString()}`, 50, 750, { width: 512, align: 'center' });
+       .text(`Order Date: ${new Date(order.createdAt).toLocaleString()}`, margin, pageHeight - 15, { width: contentWidth, align: 'center' });
 
     doc.end();
 

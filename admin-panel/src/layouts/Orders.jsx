@@ -19,13 +19,8 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
-<<<<<<< HEAD
 import { Visibility, Refresh, Download, Print } from '@mui/icons-material';
 import { getOrders, downloadInvoice } from '../services/api';
-=======
-import { Visibility, Refresh } from '@mui/icons-material';
-import { getOrders } from '../services/api';
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -60,7 +55,6 @@ const Orders = () => {
     setOpen(true);
   };
 
-<<<<<<< HEAD
   const handleDownloadInvoice = async (orderId, productIndex) => {
     try {
       await downloadInvoice(orderId, productIndex);
@@ -81,8 +75,6 @@ const Orders = () => {
     }
   };
 
-=======
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
   const getStatusColor = (order) => {
     if (order.isDelivered) return 'success';
     if (order.paymentStatus === 'cod') return 'warning';
@@ -184,7 +176,6 @@ const Orders = () => {
                   {new Date(order.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-<<<<<<< HEAD
                   <Box sx={{ display: 'flex', gap: 0.5 }}>
                     <IconButton
                       size="small"
@@ -203,15 +194,6 @@ const Orders = () => {
                       <Print />
                     </IconButton>
                   </Box>
-=======
-                  <IconButton
-                    size="small"
-                    onClick={() => handleViewOrder(order)}
-                    color="primary"
-                  >
-                    <Visibility />
-                  </IconButton>
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
                 </TableCell>
               </TableRow>
               ))}
@@ -242,7 +224,6 @@ const Orders = () => {
                   Items:
                 </Typography>
                 {selectedOrder.orderItems?.map((item, index) => (
-<<<<<<< HEAD
                   <Box 
                     key={index} 
                     sx={{ 
@@ -267,11 +248,6 @@ const Orders = () => {
                       </IconButton>
                     </Box>
                     <Typography>₹{(item.price * item.quantity).toFixed(2)}</Typography>
-=======
-                  <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography>{item.name} x {item.quantity}</Typography>
-                    <Typography>₹{item.price * item.quantity}</Typography>
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
                   </Box>
                 ))}
               </Box>
@@ -292,4 +268,3 @@ const Orders = () => {
 };
 
 export default Orders;
-

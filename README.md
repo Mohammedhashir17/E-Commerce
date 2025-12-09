@@ -1,4 +1,4 @@
-# E-Commerce MERN Stack Application
+# ZUKA - MERN Stack E-Commerce Application
 
 A complete e-commerce application built with React, Material UI, Node.js, Express, and MongoDB.
 

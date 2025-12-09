@@ -2,11 +2,8 @@ import React from 'react';
 import { Box, Container, Grid, Typography, Link, IconButton } from '@mui/material';
 import {
   Facebook,
-  Twitter,
   Instagram,
-  LinkedIn,
   Email,
-  Phone,
   LocationOn,
 } from '@mui/icons-material';
 
@@ -33,7 +30,7 @@ const Footer = () => {
               fontWeight="bold"
               sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
             >
-              E-Commerce
+              ZUKA
             </Typography>
             <Typography 
               variant="body2" 
@@ -48,6 +45,10 @@ const Footer = () => {
             <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
               <IconButton
                 size="small"
+                component="a"
+                href="https://www.facebook.com/share/1CrVLYiPAq/"
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{
                   color: 'var(--text-primary)',
                   border: '1px solid transparent',
@@ -61,19 +62,10 @@ const Footer = () => {
               </IconButton>
               <IconButton
                 size="small"
-                sx={{
-                  color: 'var(--text-primary)',
-                  border: '1px solid transparent',
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.08)',
-                    borderColor: 'var(--border-subtle)',
-                  },
-                }}
-              >
-                <Twitter />
-              </IconButton>
-              <IconButton
-                size="small"
+                component="a"
+                href="https://www.instagram.com/zuka_store1?igsh=cGtidWxiMzN3MDVv"
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{
                   color: 'var(--text-primary)',
                   border: '1px solid transparent',
@@ -84,19 +76,6 @@ const Footer = () => {
                 }}
               >
                 <Instagram />
-              </IconButton>
-              <IconButton
-                size="small"
-                sx={{
-                  color: 'var(--text-primary)',
-                  border: '1px solid transparent',
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.08)',
-                    borderColor: 'var(--border-subtle)',
-                  },
-                }}
-              >
-                <LinkedIn />
               </IconButton>
             </Box>
           </Grid>
@@ -160,27 +139,17 @@ const Footer = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Email sx={{ fontSize: { xs: 18, sm: 20 } }} />
-                <Typography 
-                  variant="body2" 
+                <Link
+                  href="mailto:zukastore786@gmail.com"
+                  color="inherit"
+                  underline="hover"
                   sx={{ 
                     opacity: 0.9,
                     fontSize: { xs: '0.75rem', sm: '0.875rem' }
                   }}
                 >
-                  support@ecommerce.com
-                </Typography>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Phone sx={{ fontSize: { xs: 18, sm: 20 } }} />
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    opacity: 0.9,
-                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
-                  }}
-                >
-                  +1 234 567 8900
-                </Typography>
+                  zukastore786@gmail.com
+                </Link>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'start', gap: 1 }}>
                 <LocationOn sx={{ fontSize: { xs: 18, sm: 20 }, mt: 0.5 }} />
@@ -188,10 +157,14 @@ const Footer = () => {
                   variant="body2" 
                   sx={{ 
                     opacity: 0.9,
-                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                    lineHeight: 1.6
                   }}
                 >
-                  123 Commerce Street, City, State 12345
+                  12/14, Allah Bakhash Street,<br />
+                  Tirupattur – 635601,<br />
+                  Tirupattur District, Tamil Nadu,<br />
+                  India.
                 </Typography>
               </Box>
             </Box>
@@ -213,7 +186,7 @@ const Footer = () => {
               fontSize: { xs: '0.7rem', sm: '0.875rem' }
             }}
           >
-            © {new Date().getFullYear()} E-Commerce. All rights reserved.
+            © {new Date().getFullYear()} ZUKA. All rights reserved.
           </Typography>
         </Box>
       </Container>

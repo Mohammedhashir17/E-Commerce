@@ -206,7 +206,7 @@ const Navbar = () => {
             }}
             onClick={() => navigate('/')}
           >
-            E-Commerce
+            ZUKA
           </Typography>
 
           {/* Search Bar in Header */}

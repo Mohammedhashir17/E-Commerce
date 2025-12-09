@@ -119,7 +119,7 @@ const Payment = () => {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_RnDMVX13aHmoPA',
         amount: paymentOrder.amount,
         currency: paymentOrder.currency,
-        name: 'E-Commerce Store',
+        name: 'ZUKA',
         description: `Order #${createdOrder._id}`,
         order_id: paymentOrder.id,
         handler: async (response) => {

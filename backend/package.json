@@ -16,10 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-<<<<<<< HEAD
     "bwip-js": "^4.8.0",
-=======
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -27,10 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "nodemailer": "^7.0.11",
-<<<<<<< HEAD
     "pdfkit": "^0.17.2",
-=======
->>>>>>> d2173165bf9146200c6b469ea37f398582504076
     "razorpay": "^2.9.2"
   },
   "devDependencies": {

@@ -38,13 +38,13 @@ export const sendOTPEmail = async (email, otp, purpose = 'login') => {
 
   const purposeText = purpose === 'login' ? 'Login' : 'Registration';
   const mailOptions = {
-    from: `"E-Commerce" <${process.env.EMAIL_USER}>`,
+    from: `"ZUKA" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: `Your ${purposeText} OTP Code`,
     html: `
       <div style="font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #050509;">
         <div style="background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%); color: #FFFFFF; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; box-shadow: 0 18px 40px rgba(108, 43, 217, 0.3);">
-          <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 1px;">E-Commerce</h1>
+          <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 1px;">ZUKA</h1>
         </div>
         <div style="background-color: #0D0D16; padding: 40px; border-radius: 0 0 12px 12px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75); border: 1px solid #262638;">
           <h2 style="color: #FFFFFF; margin-top: 0; font-size: 22px; font-weight: 600; margin-bottom: 20px;">Your ${purposeText} OTP Code</h2>
@@ -66,12 +66,12 @@ export const sendOTPEmail = async (email, otp, purpose = 'login') => {
           </p>
         </div>
         <div style="text-align: center; margin-top: 20px;">
-          <p style="color: #666; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} E-Commerce. All rights reserved.</p>
+          <p style="color: #666; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} ZUKA. All rights reserved.</p>
         </div>
       </div>
     `,
     text: `
-E-Commerce - ${purposeText} OTP Code
+ZUKA - ${purposeText} OTP Code
 
 Your OTP code is: ${otp}
 

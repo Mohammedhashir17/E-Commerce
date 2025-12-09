@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const slides = [
   {
-    title: 'Welcome to E-Commerce',
+    title: 'Welcome to ZUKA',
     subtitle: 'Discover Amazing Products at Great Prices',
     description: 'Special Offer: Get 20% off on all products! Limited time only.',
     buttonText: 'Shop Now',
