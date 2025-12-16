@@ -108,7 +108,56 @@ const Wishlist = () => {
       >
         My Wishlist
       </Typography>
-      <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }}>
+      {/* Mobile: Horizontal Scrollable - 2 products per row */}
+      <Box
+        sx={{
+          display: { xs: 'flex', sm: 'none' },
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          gap: 2,
+          pb: 1,
+          scrollSnapType: 'x mandatory',
+          '&::-webkit-scrollbar': {
+            height: '4px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(94, 43, 151, 0.3)',
+            borderRadius: '2px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: 'rgba(94, 43, 151, 0.5)',
+          },
+        }}
+      >
+        {wishlist.map((product) => (
+          <Box
+            key={product._id}
+            sx={{
+              minWidth: 'calc((100% - 16px) / 2)',
+              width: 'calc((100% - 16px) / 2)',
+              maxWidth: 'calc((100% - 16px) / 2)',
+              flexShrink: 0,
+              scrollSnapAlign: 'start',
+            }}
+          >
+            <ProductCard
+              product={product}
+              isWishlisted={true}
+              onWishlistChange={handleWishlistChange}
+            />
+          </Box>
+        ))}
+      </Box>
+
+      {/* Desktop: Grid Layout */}
+      <Grid 
+        container 
+        spacing={{ xs: 1.5, sm: 2, md: 3 }}
+        sx={{ display: { xs: 'none', sm: 'flex' } }}
+      >
         {wishlist.map((product) => (
           <Grid item xs={6} sm={6} md={4} lg={3} key={product._id}>
             <ProductCard

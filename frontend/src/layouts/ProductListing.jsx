@@ -113,17 +113,68 @@ const ProductListing = () => {
             <Typography>No products found</Typography>
           </Box>
         ) : (
-          <Grid container spacing={3}>
-            {products.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
-                <ProductCard 
-                  product={product} 
-                  isWishlisted={wishlistIds.has(product._id)}
-                  onWishlistChange={fetchWishlist}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <>
+            {/* Mobile: Horizontal Scrollable - 2 products per row */}
+            <Box
+              sx={{
+                display: { xs: 'flex', sm: 'none' },
+                overflowX: 'auto',
+                overflowY: 'hidden',
+                gap: 2,
+                pb: 1,
+                scrollSnapType: 'x mandatory',
+                '&::-webkit-scrollbar': {
+                  height: '4px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: 'rgba(94, 43, 151, 0.3)',
+                  borderRadius: '2px',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: 'rgba(94, 43, 151, 0.5)',
+                },
+              }}
+            >
+              {products.map((product) => (
+                <Box
+                  key={product._id}
+                  sx={{
+                    minWidth: 'calc((100% - 16px) / 2)',
+                    width: 'calc((100% - 16px) / 2)',
+                    maxWidth: 'calc((100% - 16px) / 2)',
+                    flexShrink: 0,
+                    scrollSnapAlign: 'start',
+                  }}
+                >
+                  <ProductCard 
+                    product={product} 
+                    isWishlisted={wishlistIds.has(product._id)}
+                    onWishlistChange={fetchWishlist}
+                  />
+                </Box>
+              ))}
+            </Box>
+
+            {/* Desktop: Grid Layout */}
+            <Grid 
+              container 
+              spacing={3}
+              sx={{ display: { xs: 'none', sm: 'flex' } }}
+            >
+              {products.map((product) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                  <ProductCard 
+                    product={product} 
+                    isWishlisted={wishlistIds.has(product._id)}
+                    onWishlistChange={fetchWishlist}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </>
         )}
       </Container>
       <Footer />

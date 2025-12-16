@@ -179,11 +179,17 @@ const ProductDetail = () => {
           </Box>
           <Typography 
             variant="h5" 
-            color="primary.main" 
             sx={{ 
               mb: { xs: 1.5, sm: 2 }, 
               fontWeight: 'bold',
-              fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }
+              fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' },
+              color: '#ffffff',
+              background: 'rgba(139, 92, 246, 0.2)',
+              px: { xs: 1.5, sm: 2 },
+              py: { xs: 0.5, sm: 0.75 },
+              borderRadius: 2,
+              display: 'inline-block',
+              border: '1px solid rgba(139, 92, 246, 0.4)'
             }}
           >
             ₹{product.price}
@@ -257,7 +263,8 @@ const ProductDetail = () => {
           <Box sx={{ 
             display: 'flex', 
             gap: { xs: 1, sm: 2 },
-            flexDirection: { xs: 'column', sm: 'row' }
+            flexDirection: 'row',
+            alignItems: 'center'
           }}>
             <Button
               variant="contained"
@@ -269,7 +276,8 @@ const ProductDetail = () => {
                 flex: 1, 
                 bgcolor: 'primary.main',
                 fontSize: { xs: '0.875rem', sm: '1rem' },
-                py: { xs: 1, sm: 1.5 }
+                py: { xs: 1, sm: 1.5 },
+                minHeight: { xs: '48px', sm: 'auto' }
               }}
             >
               Add to Cart
@@ -280,8 +288,12 @@ const ProductDetail = () => {
                 border: '2px solid',
                 borderColor: 'primary.main',
                 color: isWishlisted ? 'error.main' : 'primary.main',
-                width: { xs: '100%', sm: 'auto' },
-                height: { xs: '48px', sm: 'auto' }
+                width: { xs: '48px', sm: '56px' },
+                height: { xs: '48px', sm: '56px' },
+                flexShrink: 0,
+                '&:hover': {
+                  bgcolor: isWishlisted ? 'rgba(255, 23, 68, 0.1)' : 'rgba(94, 43, 151, 0.1)'
+                }
               }}
             >
               {isWishlisted ? (

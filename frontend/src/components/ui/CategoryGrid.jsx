@@ -21,7 +21,120 @@ const CategoryGrid = ({ categories }) => {
 
   return (
     <Box sx={{ mb: { xs: 4, sm: 5, md: 6 }, mt: { xs: 3, sm: 4 } }}>
-      <Grid container spacing={{ xs: 2, sm: 3, md: 4 }} justifyContent="center">
+      {/* Mobile: Horizontal Scrollable - Show 3 at a time */}
+      <Box
+        sx={{
+          display: { xs: 'flex', sm: 'none' },
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          gap: 2,
+          pb: 1,
+          px: 1,
+          scrollSnapType: 'x mandatory',
+          '&::-webkit-scrollbar': {
+            height: '4px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(94, 43, 151, 0.3)',
+            borderRadius: '2px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: 'rgba(94, 43, 151, 0.5)',
+          },
+        }}
+      >
+        {categories.map((category) => {
+          const imageUrl = CATEGORY_IMAGES[category.name] || 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=400&fit=crop&auto=format&q=80';
+          
+          return (
+            <Paper
+              key={category._id}
+              elevation={0}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+                p: 1.5,
+                width: 'calc((100vw - 48px) / 3)',
+                minWidth: 'calc((100vw - 48px) / 3)',
+                maxWidth: 'calc((100vw - 48px) / 3)',
+                flexShrink: 0,
+                scrollSnapAlign: 'start',
+                transition: 'all 0.3s ease',
+                bgcolor: 'transparent',
+                '&:active': {
+                  transform: 'scale(0.95)',
+                },
+                '&:hover': {
+                  '& .category-image': {
+                    transform: 'scale(1.05)',
+                  },
+                  '& .category-name': {
+                    color: 'primary.main',
+                  },
+                },
+              }}
+              onClick={() => handleCategoryClick(category.name)}
+            >
+              <Box
+                sx={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  mb: 1,
+                  border: '2px solid',
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 12px rgba(94, 43, 151, 0.3)',
+                  transition: 'transform 0.3s ease',
+                }}
+                className="category-image"
+              >
+                <Box
+                  component="img"
+                  src={imageUrl}
+                  alt={category.name}
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=400&fit=crop&auto=format&q=80';
+                  }}
+                />
+              </Box>
+              <Typography
+                variant="body2"
+                className="category-name"
+                sx={{
+                  textAlign: 'center',
+                  fontWeight: 600,
+                  fontSize: '0.7rem',
+                  color: 'text.primary',
+                  transition: 'color 0.3s ease',
+                  wordBreak: 'break-word',
+                  px: 0.5,
+                }}
+              >
+                {category.name}
+              </Typography>
+            </Paper>
+          );
+        })}
+      </Box>
+
+      {/* Desktop: Grid Layout */}
+      <Grid 
+        container 
+        spacing={{ xs: 2, sm: 3, md: 4 }} 
+        justifyContent="center"
+        sx={{ display: { xs: 'none', sm: 'flex' } }}
+      >
         {categories.map((category) => {
           const imageUrl = CATEGORY_IMAGES[category.name] || 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=400&fit=crop&auto=format&q=80';
           

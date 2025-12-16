@@ -102,10 +102,10 @@ const Home = () => {
                 <Box sx={{ 
                   display: 'flex', 
                   justifyContent: 'space-between', 
-                  alignItems: { xs: 'flex-start', sm: 'center' },
+                  alignItems: 'center',
                   mb: { xs: 2, sm: 3 },
-                  flexDirection: { xs: 'column', sm: 'row' },
-                  gap: { xs: 1, sm: 0 }
+                  flexDirection: 'row',
+                  gap: 1
                 }}>
                   <Typography 
                     variant="h4" 
@@ -114,6 +114,7 @@ const Home = () => {
                       fontWeight: 'bold',
                       fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
                       animation: 'fadeIn 0.5s ease-in',
+                      flex: 1,
                       '@keyframes fadeIn': {
                         from: { opacity: 0, transform: 'translateY(-10px)' },
                         to: { opacity: 1, transform: 'translateY(0)' },
@@ -132,6 +133,7 @@ const Home = () => {
                       fontSize: { xs: '0.75rem', sm: '0.875rem' },
                       px: { xs: 1.5, sm: 2 },
                       py: { xs: 0.5, sm: 0.75 },
+                      flexShrink: 0,
                       '&:hover': {
                         bgcolor: '#2a2a3e',
                         borderColor: 'var(--accent-purple)',
@@ -140,13 +142,72 @@ const Home = () => {
                         boxShadow: '0 4px 12px rgba(108, 43, 217, 0.3)',
                       },
                       transition: 'all 0.3s ease',
-                      alignSelf: { xs: 'flex-start', sm: 'center' }
                     }}
                   >
                     View All
                   </Button>
                 </Box>
-                <Grid container spacing={3}>
+                {/* Mobile: Horizontal Scrollable - 2 products per row */}
+                <Box
+                  sx={{
+                    display: { xs: 'flex', sm: 'none' },
+                    overflowX: 'auto',
+                    overflowY: 'hidden',
+                    gap: 2,
+                    pb: 1,
+                    scrollSnapType: 'x mandatory',
+                    '&::-webkit-scrollbar': {
+                      height: '4px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      background: 'transparent',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      background: 'rgba(94, 43, 151, 0.3)',
+                      borderRadius: '2px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      background: 'rgba(94, 43, 151, 0.5)',
+                    },
+                  }}
+                >
+                  {products.map((product, index) => (
+                    <Box
+                      key={product._id}
+                      sx={{
+                        minWidth: 'calc((100% - 16px) / 2)',
+                        width: 'calc((100% - 16px) / 2)',
+                        maxWidth: 'calc((100% - 16px) / 2)',
+                        flexShrink: 0,
+                        scrollSnapAlign: 'start',
+                        animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`,
+                        '@keyframes fadeInUp': {
+                          from: { 
+                            opacity: 0, 
+                            transform: 'translateY(20px)' 
+                          },
+                          to: { 
+                            opacity: 1, 
+                            transform: 'translateY(0)' 
+                          },
+                        },
+                      }}
+                    >
+                      <ProductCard 
+                        product={product} 
+                        isWishlisted={wishlistIds.has(product._id)}
+                        onWishlistChange={fetchWishlist}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+
+                {/* Desktop: Grid Layout */}
+                <Grid 
+                  container 
+                  spacing={3}
+                  sx={{ display: { xs: 'none', sm: 'flex' } }}
+                >
                   {products.map((product, index) => (
                     <Grid 
                       item 
