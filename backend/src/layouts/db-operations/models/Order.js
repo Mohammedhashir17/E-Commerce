@@ -90,6 +90,11 @@ const orderSchema = new mongoose.Schema({
   deliveredAt: {
     type: Date,
   },
+  status: {
+    type: String,
+    enum: ['ORDER_PLACED', 'PROCESSING', 'SHIPPED', 'OUT_FOR_DELIVERY', 'DELIVERED'],
+    default: 'ORDER_PLACED',
+  },
   razorpayOrderId: {
     type: String,
   },

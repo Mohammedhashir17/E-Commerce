@@ -36,6 +36,7 @@ export const createOrder = async (userId, shippingAddress, paymentMethod) => {
     shippingPrice,
     taxPrice,
     totalPrice,
+    status: 'ORDER_PLACED',
   });
 
   await clearCart(userId);
@@ -92,9 +93,34 @@ export const updateOrderToDelivered = async (orderId) => {
 
   order.isDelivered = true;
   order.deliveredAt = Date.now();
+  order.status = 'DELIVERED';
 
   await order.save();
   return order;
+};
+
+export const updateOrderStatus = async (orderId, status) => {
+  const order = await Order.findById(orderId);
+  
+  if (!order) {
+    throw new Error('Order not found');
+  }
+
+  const validStatuses = ['ORDER_PLACED', 'PROCESSING', 'SHIPPED', 'OUT_FOR_DELIVERY', 'DELIVERED'];
+  if (!validStatuses.includes(status)) {
+    throw new Error('Invalid status');
+  }
+
+  order.status = status;
+  
+  // Update legacy fields for backward compatibility
+  if (status === 'DELIVERED') {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+  }
+
+  await order.save();
+  return await Order.findById(orderId).populate('user', 'name email').populate('orderItems.product');
 };
 
 const clearCart = async (userId) => {

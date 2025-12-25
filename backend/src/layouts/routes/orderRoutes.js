@@ -5,6 +5,7 @@ import {
   getUserOrders,
   updateOrderToPaid,
   updateOrderToDelivered,
+  updateOrderStatus,
 } from '../service/orderService.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { generateProductInvoice, generateOrderInvoice } from '../service/invoiceService.js';
@@ -130,19 +131,6 @@ router.get('/scan/:barcode', async (req, res) => {
   }
 });
 
-router.get('/:id', protect, async (req, res) => {
-  try {
-    // Prevent "all" and "scan" from being treated as an ID
-    if (req.params.id === 'all' || req.params.id === 'scan') {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-    const order = await getOrderById(req.params.id, req.user._id);
-    res.json(order);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-});
-
 router.put('/:id/pay', protect, async (req, res) => {
   try {
     const order = await updateOrderToPaid(req.params.id, req.body);
@@ -155,6 +143,42 @@ router.put('/:id/pay', protect, async (req, res) => {
 router.put('/:id/deliver', protect, async (req, res) => {
   try {
     const order = await updateOrderToDelivered(req.params.id);
+    res.json(order);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+// PUT /:id/status route for updating order status - specific route to avoid conflicts
+router.put('/:id/status', protect, async (req, res) => {
+  try {
+    console.log('PUT /:id/status route hit', req.params.id, req.body);
+    // Only admins can update order status
+    if (req.user.role !== 'admin') {
+      console.log('Access denied - User role:', req.user.role);
+      return res.status(403).json({ message: 'Access denied. Admin role required.' });
+    }
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({ message: 'Status is required' });
+    }
+    console.log('Updating order status:', req.params.id, 'to', status);
+    const order = await updateOrderStatus(req.params.id, status);
+    console.log('Order status updated successfully');
+    res.json(order);
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.get('/:id', protect, async (req, res) => {
+  try {
+    // Prevent "all" and "scan" from being treated as an ID
+    if (req.params.id === 'all' || req.params.id === 'scan') {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+    const order = await getOrderById(req.params.id, req.user._id);
     res.json(order);
   } catch (error) {
     res.status(404).json({ message: error.message });
